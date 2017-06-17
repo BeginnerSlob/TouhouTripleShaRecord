@@ -79,25 +79,6 @@ function fillZhangongTable(id){// {{{
             }
             (window as any).componentHandler.upgradeDom();
         });
-
-        let head = document.querySelector('#achievement-table-head');
-        head.innerHTML = '';
-
-        let ignore: any = {};
-        for(let i = 0; i < res[0].length; i ++){
-            let th = document.createElement('th');
-            if(res[0][i][0] == '~'){
-                ignore[i] = true;
-                continue;
-            }
-            th.innerText = res[0][i];
-            th.classList.add('mdl-data-table__cell--non-numeric');
-            head.appendChild(th);
-        }
-
-        let body = document.querySelector('#achievement-table-body');
-        body.innerHTML = '';
-        fillTable(body, {rows: res.slice(1), ignore, button: false});
     });
 
     getCSV(`${URL_BASE}/${id}_record.csv`).then(res => {
