@@ -4,6 +4,7 @@ import * as CSV from 'csv-js';
 
 const URL_ACCOUNTS = 'https://raw.githubusercontent.com/BeginnerSlob/TouhouTripleShaRecord/master/data/accounts.csv';
 const URL_ZHANGONG = 'https://raw.githubusercontent.com/BeginnerSlob/TouhouTripleShaRecord/master/data/zhangong.csv';
+const URL_ACHIEVEMENT = 'https://raw.githubusercontent.com/BeginnerSlob/TouhouTripleShaRecord/master/data/achievement.csv';
 const URL_BASE     = 'https://raw.githubusercontent.com/BeginnerSlob/TouhouTripleShaRecord/master/data';
 
 function getCSV(url = URL_ACCOUNTS): Promise{// {{{
@@ -59,6 +60,26 @@ function fillTable(body, data: {rows: string[][], ignore?: {[key: number]: boole
 function fillZhangongTable(id){// {{{
     getCSV(`${URL_BASE}/${id}_achievement.csv`).then(res => {
 
+        getAchievementTemplates().then(templates => {
+            let achievements = document.querySelector('#achievements');
+            achievements.innerHTML = '';
+            for(let i = 1; i < res.length; i ++){
+                let [id, completions, firstCompletion, progress] = res[i];
+                let img = 'sha.png';
+                let template = templates[id];
+                let {title, desc, completionRequired} = template;
+                if(completionRequired > 1)desc += `(${progress}/${completionRequired})`;
+
+                let div = makeZhangongIcon({
+                    id, img, title, desc, completions, progress,
+                    firstCompletion, requiredProgress: completionRequired
+                });
+                achievements.appendChild(div);
+                console.log(div);
+            }
+            (window as any).componentHandler.upgradeDom();
+        });
+
         let head = document.querySelector('#achievement-table-head');
         head.innerHTML = '';
 
@@ -101,6 +122,35 @@ function fillZhangongTable(id){// {{{
         fillTable(body, {rows: res.slice(1), ignore, button: false});
     });
 }// }}}
+
+let achievementTemplates: {
+    [id: string]:{
+        id: string;
+        title: string;
+        desc: string;
+        score: string;
+        completionRequired: string;
+    }
+} = {};
+let gotAchievements = false;
+
+function getAchievementTemplates(){
+    return new Promise(resolve => {
+        if(gotAchievements){
+            resolve(achievementTemplates);
+            return;
+        }
+        getCSV(URL_ACHIEVEMENT).then(res =>{
+            for(let i = 1; i < res.length; i ++){
+                let [id, title, desc, score, completionRequired] = res[i];
+                achievementTemplates[id] = {
+                    id, title, desc, score, completionRequired
+                };
+            }
+            resolve(achievementTemplates);
+        });
+    });
+}
 
 let data: any[] = null;
 getCSV().then(res =>{
@@ -157,6 +207,7 @@ interface ZhangongItem{
     desc: string;
     completions: number;
     firstCompletion?: string;
+    progress: number;
     requiredProgress: number;
 }
 
@@ -179,77 +230,21 @@ function makeZhangongIcon(item: ZhangongItem){
     let div = el('div' );
     div.innerHTML = temp;
     
-    console.log(div);
     let progress = div.querySelector(`#${item.id}-progress`);
-    if(item.requiredProgress == 1){
+    if(item.requiredProgress <= 1){
         progress.parentElement.removeChild(progress);
-        if(item.completions > 0){
-            div.classList.add('mdl-badge');
-            div.dataset['badge'] = item.completions == 1 ? '✓' : item.completions + '';
-        }
     }else{
-        if(item.completions >= item.requiredProgress){
-            div.classList.add('mdl-badge');
-            div.dataset['badge'] = '✓';
-        }
         progress.addEventListener('mdl-componentupgraded', e => {
-            (progress as any).MaterialProgress.setProgress(Math.min(1, item.completions / item.requiredProgress) * 100);
+            (progress as any).MaterialProgress.setProgress(item.progress / item.requiredProgress * 100);
         });
+    }
+    if(item.completions > 0){
+        div.classList.add('mdl-badge');
+        div.dataset['badge'] = item.completions == 1 ? '✓' : item.completions + '';
+    }else{
+        let img = div.querySelector('img');
+        img.style.filter = 'grayscale(1)';
     }
 
     return div;
 }
-
-let achievements = document.querySelector('#achievements');
-
-interface Achievement{
-    id: string;
-    img: string;
-    title: string;
-    desc: string;
-    requiredProgress: string;
-}
-achievements.appendChild(makeZhangongIcon({
-    id: 'weisuoyuwei',
-    img:'sha.png',
-    title: '为所欲为',
-    desc: '日天10次(8/10)',
-    completions: 8,
-    firstCompletion: '2017-10-01',
-    requiredProgress: 10,
-}));
-achievements.appendChild(makeZhangongIcon({
-    id: 'sxbk4',
-    img:'sha.png',
-    title: '为所欲为',
-    desc: '日天10次(12/10)',
-    completions: 12,
-    firstCompletion: '2017-10-01',
-    requiredProgress: 10,
-}));
-achievements.appendChild(makeZhangongIcon({
-    id: 'sxbk',
-    img:'sha.png',
-    title: '丧心病狂',
-    desc: '干了某件特别丧的事情',
-    completions: 3,
-    firstCompletion: '2017-10-01',
-    requiredProgress: 1,
-}));
-achievements.appendChild(makeZhangongIcon({
-    id: 'sxbk2',
-    img:'sha.png',
-    title: '丧心病狂',
-    desc: '干了某件特别丧的事情',
-    completions: 0,
-    requiredProgress: 1,
-}));
-achievements.appendChild(makeZhangongIcon({
-    id: 'sxbk3',
-    img:'sha.png',
-    title: '丧心病狂',
-    desc: '干了某件特别丧的事情',
-    completions: 1,
-    firstCompletion: '2017-10-01',
-    requiredProgress: 1,
-}));
