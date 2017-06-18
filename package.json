@@ -12,10 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "browserify": "^14.4.0",
-    "promise": "^7.1.1",
+    "csv-js": "^1.0.0",
+    "promise": "^7.3.0",
     "tsify": "^3.0.1",
     "typescript": "^2.3.4",
-    "csv-js": "^1.0.0",
     "uglify-es": "^3.0.15"
   }
 }
