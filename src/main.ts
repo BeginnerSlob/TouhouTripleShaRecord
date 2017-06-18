@@ -2,6 +2,7 @@
 import * as Promise from 'promise';
 import * as data from './data';
 import * as table from './table';
+import * as stats from './statistics';
 
 export const URL_BASE     = 'https://raw.githubusercontent.com/BeginnerSlob/TouhouTripleShaRecord/master/data';
 export const URL_ACCOUNTS = `${URL_BASE}/accounts.csv`;
@@ -11,7 +12,11 @@ export const URL_WEN = `${URL_BASE}/wen.csv`;
 export const URL_WU = `${URL_BASE}/wu.csv`;
 export const URL_LEVEL = `${URL_BASE}/level.csv`;
 
-let playersHeader = ['~uid','用户名','~密码','~主公胜场','~忠臣胜场','~反贼胜场','~内奸胜场','~离线','~总场数','经验值','文功','武功'];
+let playersHeader = ['~uid','用户名','~密码',
+    '~主公胜场','~忠臣胜场','~反贼胜场','~内奸胜场',
+    '~离线','~总场数','经验值','文功','武功',
+    '等级', '文官职', '武官职'
+    ];
 let playersHead = document.querySelector('#table-head') as HTMLTableHeaderCellElement;
 let playersHeaderIgnore = table.header(playersHead, playersHeader);
 
@@ -24,6 +29,10 @@ data.getPlayers().then(res =>{
         }
     };
     table.body(body, res, playersHeaderIgnore, button);
+    stats.getStatistics(res).then(extra => {
+        res = stats.appendColumns(res, extra);
+        table.body(body, res, playersHeaderIgnore, button);
+    });
 
     let search = document.querySelector('#search-bar') as HTMLInputElement;
     search.addEventListener('change', e => {
@@ -41,6 +50,10 @@ data.getPlayers().then(res =>{
         }
         
         table.body(body, result, playersHeaderIgnore, button);
+        stats.getStatistics(result).then(extra => {
+            result = stats.appendColumns(result, extra);
+            table.body(body, result, playersHeaderIgnore, button);
+        });
     });
 });
 

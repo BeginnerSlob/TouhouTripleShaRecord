@@ -130,7 +130,7 @@ export function getWuCalculator(){
                 for(let i = levels.length - 1; i >= 0; i --){
                     let threshold = parseInt(levels[i][0]);
                     let title = levels[i][1];
-                    if(exp >= threshold)return title;
+                    if(exp >= threshold)return title; 
                 }
                 return '无';
             };
