@@ -62,7 +62,79 @@ let players: string[][] = null;// {{{
 
 export function getPlayers(){
     return new Promise<string[][]>(resolve => {
-        if(players)resolve(players);
+        if(players){
+            resolve(players);
+            return;
+        }
         getCSV(main.URL_ACCOUNTS).then(resolve);
     });
 }// }}}
+
+let levelCalc: (score: number) => number = null;
+
+export function getLevelCalculator(){
+    return new Promise<(score: number) => number>(resolve => {
+        if(levelCalc){
+            resolve(levelCalc);
+            return;
+        }
+        getCSV(main.URL_LEVEL).then(res => {
+            let levels = res as string[][];
+            levelCalc =  (exp: number) => {
+                for(let i = levels.length - 1; i >= 0; i --){
+                    let threshold = parseInt(levels[i][0]);
+                    let level = parseInt(levels[i][1]);
+                    if(exp >= threshold)return level;
+                }
+                return 0;
+            };
+            resolve(levelCalc);
+        });
+    });
+}
+
+let wenCalc: (score: number) => string = null;
+
+export function getWenCalculator(){
+    return new Promise<(score: number) => string>(resolve => {
+        if(wenCalc){
+            resolve(wenCalc);
+            return;
+        }
+        getCSV(main.URL_WEN).then(res => {
+            let levels = res as string[][];
+            wenCalc =  (exp: number) => {
+                for(let i = levels.length - 1; i >= 0; i --){
+                    let threshold = parseInt(levels[i][0]);
+                    let title = levels[i][1];
+                    if(exp >= threshold)return title;
+                }
+                return '无';
+            };
+            resolve(wenCalc);
+        });
+    });
+}
+
+let wuCalc: (score: number) => string = null;
+
+export function getWuCalculator(){
+    return new Promise<(score: number) => string>(resolve => {
+        if(wuCalc){
+            resolve(wuCalc);
+            return;
+        }
+        getCSV(main.URL_WU).then(res => {
+            let levels = res as string[][];
+            wuCalc =  (exp: number) => {
+                for(let i = levels.length - 1; i >= 0; i --){
+                    let threshold = parseInt(levels[i][0]);
+                    let title = levels[i][1];
+                    if(exp >= threshold)return title;
+                }
+                return '无';
+            };
+            resolve(wuCalc);
+        });
+    });
+}
