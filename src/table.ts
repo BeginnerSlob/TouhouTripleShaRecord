@@ -99,10 +99,12 @@ export function makeZhangongIcon(item: ZhangongItem){
 export function achievements(achievements: HTMLElement, res: string[][]){
     data.getAchievementTemplates().then(templates => {
         let all = achievements.querySelector('#achievements-all-panel');
-        let untagged = achievements.querySelector('#achievements-untagged-panel');
+        let uncompleted = achievements.querySelector('#achievements-uncompleted-panel');
+        let completed = achievements.querySelector('#achievements-completed-panel');
 
         all.innerHTML = '';
-        untagged.innerHTML = '';
+        uncompleted.innerHTML = '';
+        completed.innerHTML = '';
 
         for(let i = 1; i < res.length; i ++){
             let [id, completionsS, firstCompletion, progressS] = res[i];
@@ -119,7 +121,8 @@ export function achievements(achievements: HTMLElement, res: string[][]){
             });
 
             all.appendChild(div);
-            untagged.appendChild(div.cloneNode());
+            if(completions > 0)completed.appendChild(div.cloneNode(true));
+            else uncompleted.appendChild(div.cloneNode(true));
         }
         (window as any).componentHandler.upgradeDom();
     });
