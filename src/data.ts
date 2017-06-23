@@ -10,7 +10,9 @@ export function getCSV(url = main.URL_ACCOUNTS): Promise<string[][]>{// {{{
         xhttp.onreadystatechange = () =>{
             if(xhttp.readyState == 4){
                 if(xhttp.status == 200){
-                    resolve( CSV.parse(xhttp.responseText));
+                    const data =  CSV.parse(xhttp.responseText);
+                    console.log(data);
+                    resolve(data);
                 }else{
                     reject('');
                 }

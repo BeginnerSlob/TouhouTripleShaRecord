@@ -13,10 +13,10 @@ export const URL_WU = `${URL_BASE}/wu.csv`;
 export const URL_LEVEL = `${URL_BASE}/level.csv`;
 
 let playersHeader = ['~uid','用户名','~密码',
-    '~主公胜场','~忠臣胜场','~反贼胜场','~内奸胜场',
-    '~离线','~总场数','经验值','文功','武功',
-    '等级', '文官职', '武官职'
-    ];
+                     '~主公胜场','~忠臣胜场','~反贼胜场','~内奸胜场',
+                     '~离线','~总场数','经验值','文功','武功',
+                     '等级', '文官职', '武官职', '逃跑率', '总胜率'
+                    ];
 let playersHead = document.querySelector('#table-head') as HTMLTableHeaderCellElement;
 let playersHeaderIgnore = table.header(playersHead, playersHeader);
 
@@ -24,7 +24,6 @@ data.getPlayers().then(res =>{
     let body = document.querySelector('#table-body') as HTMLTableDataCellElement;
     let button = {
         name: '查看战绩', callback: row => {
-            console.log(row);
             fillPlayerTables(row[0]);
         }
     };

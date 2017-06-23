@@ -66,6 +66,7 @@ interface ZhangongItem{
 
 export function makeZhangongIcon(item: ZhangongItem){
     if(!item.firstCompletion)item.firstCompletion = '';
+    if(item.firstCompletion == '1990-01-01')item.firstCompletion = '';
     let temp = document.querySelector('template#template-achievement').innerHTML;
     for(let key in item){
         let text = item[key];
@@ -79,6 +80,7 @@ export function makeZhangongIcon(item: ZhangongItem){
     if(item.requiredProgress <= 1){
         progress.parentElement.removeChild(progress);
     }else{
+        progress.parentElement.insertBefore(el('br'), progress);
         progress.addEventListener('mdl-componentupgraded', e => {
             (progress as any).MaterialProgress.setProgress(item.progress / item.requiredProgress * 100);
         });
@@ -96,7 +98,12 @@ export function makeZhangongIcon(item: ZhangongItem){
 
 export function achievements(achievements: HTMLElement, res: string[][]){
     data.getAchievementTemplates().then(templates => {
-        achievements.innerHTML = '';
+        let all = achievements.querySelector('#achievements-all-panel');
+        let untagged = achievements.querySelector('#achievements-untagged-panel');
+
+        all.innerHTML = '';
+        untagged.innerHTML = '';
+
         for(let i = 1; i < res.length; i ++){
             let [id, completionsS, firstCompletion, progressS] = res[i];
             let completions = parseInt(completionsS);
@@ -110,7 +117,9 @@ export function achievements(achievements: HTMLElement, res: string[][]){
                 id, img, title, desc, completions, progress,
                 firstCompletion, requiredProgress: completionRequired
             });
-            achievements.appendChild(div);
+
+            all.appendChild(div);
+            untagged.appendChild(div.cloneNode());
         }
         (window as any).componentHandler.upgradeDom();
     });

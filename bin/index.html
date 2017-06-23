@@ -25,6 +25,9 @@
         .mdl-badge {
             margin-right: inherit;
         }
+     #achievements .mdl-tabs__panel.is-active {
+         display: flex;
+     }
     </style>
 </head>
 <body>
@@ -48,7 +51,19 @@
         <div class="mdl-cell mdl-cell--8-col" >
             <div class="mdl-shadow--2dp"  style="margin-bottom: 1em;">
                 <div style="font-weight: bold; padding: 0.5em; width: 100%; text-align: center; font-size: 1.2em; line-height: 2em;">战功</div>
-                <div id="achievements" style="display: flex; "></div>
+                <div id="achievements">
+                    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                        <div class="mdl-tabs__tab-bar">
+                            <a href="#achievements-untagged-panel" class="mdl-tabs__tab">未分类</a>
+                            <a href="#achievements-all-panel" class="mdl-tabs__tab is-active">所有</a>
+                        </div>
+
+                        <div class="mdl-tabs__panel" id="achievements-untagged-panel">
+                        </div>
+                        <div class="mdl-tabs__panel is-active" id="achievements-all-panel">
+                        </div>
+                    </div>
+                </div>
             </div>
             <table class="mdl-data-table mdl-js-data-table  mdl-shadow--2dp">
                 <thead>
