@@ -25,8 +25,20 @@
      .mdl-badge {
          margin-right: inherit;
      }
-     #achievements .mdl-tabs__panel.is-active {
+     #achievements .mdl-tabs__panel {
          display: flex;
+     }
+     #achievements-panel > div {
+         display: none;
+     }
+     #achievements-panel.completed > .completed-achievement {
+         display: initial;
+     }
+     #achievements-panel.uncompleted > .uncompleted-achievement {
+         display: initial;
+     }
+     #achievements-panel.all > div {
+         display: initial;
      }
     </style>
 </head>
@@ -47,6 +59,18 @@
                 <tbody id="table-body">
                 </tbody>
             </table>
+
+            <br/>
+
+            <table class="mdl-data-table mdl-js-data-table  mdl-shadow--2dp">
+                <thead>
+                    <tr id="table-head-pt2">
+                        <th class="mdl-data-table__cell--non-numeric">id</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body-pt2">
+                </tbody>
+            </table>
         </div>
         <div class="mdl-cell mdl-cell--8-col" >
             <div class="mdl-shadow--2dp"  style="margin-bottom: 1em;">
@@ -54,16 +78,11 @@
                 <div id="achievements">
                     <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
                         <div class="mdl-tabs__tab-bar">
-                            <a href="#achievements-uncompleted-panel" class="mdl-tabs__tab">未达成</a>
-                            <a href="#achievements-completed-panel" class="mdl-tabs__tab">已达成</a>
-                            <a href="#achievements-all-panel" class="mdl-tabs__tab is-active">所有</a>
+                            <a id="achievements-uncompleted-tab" href="#achievements-panel" class="mdl-tabs__tab">未达成</a>
+                            <a id="achievements-completed-tab" href="#achievements-panel" class="mdl-tabs__tab">已达成</a>
+                            <a id="achievements-all-tab" href="#achievements-panel" class="mdl-tabs__tab">所有</a>
                         </div>
-
-                        <div class="mdl-tabs__panel" id="achievements-uncompleted-panel">
-                        </div>
-                        <div class="mdl-tabs__panel" id="achievements-completed-panel">
-                        </div>
-                        <div class="mdl-tabs__panel is-active" id="achievements-all-panel">
+                        <div class="mdl-tabs__panel" id="achievements-panel">
                         </div>
                     </div>
                 </div>

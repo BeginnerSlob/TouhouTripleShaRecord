@@ -75,14 +75,14 @@ export function makeZhangongIcon(item: ZhangongItem){
     }
     let div = el('div' );
     div.innerHTML = temp;
-    
+
     let progress = div.querySelector(`#${item.id}-progress`);
     if(item.requiredProgress <= 1){
         progress.parentElement.removeChild(progress);
     }else{
         progress.parentElement.insertBefore(el('br'), progress);
         progress.addEventListener('mdl-componentupgraded', e => {
-            (progress as any).MaterialProgress.setProgress(item.progress / item.requiredProgress * 100);
+            (progress as any).MaterialProgress.setProgress(Math.min(100, item.progress / item.requiredProgress * 100));
         });
     }
     if(item.completions > 0){
@@ -98,15 +98,11 @@ export function makeZhangongIcon(item: ZhangongItem){
 
 export function achievements(achievements: HTMLElement, res: string[][]){
     data.getAchievementTemplates().then(templates => {
-        let all = achievements.querySelector('#achievements-all-panel');
-        let uncompleted = achievements.querySelector('#achievements-uncompleted-panel');
-        let completed = achievements.querySelector('#achievements-completed-panel');
+        let all = achievements.querySelector('#achievements-panel');
 
         all.innerHTML = '';
-        uncompleted.innerHTML = '';
-        completed.innerHTML = '';
 
-        for(let i = 1; i < res.length; i ++){
+        for(let i = 0; i < res.length; i ++){
             let [id, completionsS, firstCompletion, progressS] = res[i];
             let completions = parseInt(completionsS);
             let progress = parseInt(progressS);
@@ -120,10 +116,9 @@ export function achievements(achievements: HTMLElement, res: string[][]){
                 firstCompletion, requiredProgress: completionRequired
             });
 
+            if(completions > 0) div.classList.add('completed-achievement');
             all.appendChild(div);
-            if(completions > 0)completed.appendChild(div.cloneNode(true));
-            else uncompleted.appendChild(div.cloneNode(true));
         }
-        (window as any).componentHandler.upgradeDom();
+        window.requestAnimationFrame((window as any).componentHandler.upgradeDom());
     });
 }

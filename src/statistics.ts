@@ -59,7 +59,7 @@ export function getStatistics(row: string[], achievements: string[][], records: 
                     return [calcLevel(exp) + '',
                             calcWen(wen) + '',
                             calcWu(wu) + '',
-                            alltotal + '', ratio(total.黑幕 + total.司祝 + total.异端 + total.君主, alltotal),
+                            alltotal + '', ratio(win.黑幕 + win.司祝 + win.异端 + win.君主, alltotal),
                             ratio(offline, alltotal),
                             total.君主 + '', ratio(win.君主, total.君主),
                             total.司祝 + '', ratio(win.司祝, total.司祝),
