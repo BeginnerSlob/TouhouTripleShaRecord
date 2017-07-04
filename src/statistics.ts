@@ -40,7 +40,7 @@ export function getStatistics(row: string[], achievements: string[][], records: 
                         const char = item[1];
                         total[char] = (total[char] || 0) + 1;
 
-                        if (total[char] > (total[max_name] || 0))
+                        if (total[char] > (total[max_name] || 0) && total[char] >= 3)
                             max_name = char;
 
                         const role = item[3];
