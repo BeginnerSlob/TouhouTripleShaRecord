@@ -25,78 +25,47 @@ export function getStatistics(row: string[], achievements: string[][], records: 
                     let wen = parseInt(row[4]);
                     let wu  = parseInt(row[5]);
 
+                    const win: {[key: string]: number} = {};
+                    const total: {[key: string]: number} = {};
+                    win.君主 = win.司祝 = win.异端 = win.黑幕 = 0;
+                    total.君主 = total.司祝 = total.异端 = total.黑幕 = 0;
+
+                    let allwin = 0;
+                    let alltotal = 0;
                     let offline = 0;
-                    let total = 0;
 
-                    let zhuwins = 0;
-                    let zhongwins = 0;
-                    let fanwins = 0;
-                    let neiwins = 0;
+                    let max_name = '';
 
-                    let zhus = 0;
-                    let zhongs = 0;
-                    let fans = 0;
-                    let neis = 0;
-
-                    const usage: {[key: string]: number} = {};
-                    let max = 0;
-                    let max_names = '';
                     for(const item of records){
                         const char = item[1];
-                        total = total + 1;
-                        if(item[3] == '君主'){
-                            zhus = zhus + 1;
-                        }
-                        else if(item[3] == '司祝'){
-                            zhongs = zhongs + 1;
-                        }
-                        else if(item[3] == '异端'){
-                            fans = fans + 1;
-                        }
-                        else if(item[3] == '黑幕'){
-                            neis = neis + 1;
-                        }
-                        if(item[6] == '逃跑') {
-                            offline = offline + 1;
-                        }
-                        else if(item[6] = '胜利'){
-                            if(item[3] == '君主'){
-                                zhuwins = zhuwins + 1;
-                            }
-                            else if(item[3] == '司祝'){
-                                zhongwins = zhongwins + 1;
-                            }
-                            else if(item[3] == '异端'){
-                                fanwins = fanwins + 1;
-                            }
-                            else if(item[3] == '黑幕'){
-                                neiwins = neiwins + 1;
-                            }
-                        }
-                        usage[char] = (usage[char] || 0) + 1;
-                        if(usage[char] < 3){
-                            continue;
-                        }
-                        if(usage[char] > max){
-                            max = usage[char];
-                            max_names = char;
-                        }
-                        else if(usage[char] == max) {
-                            max_names = max_names + '，' + char;
+                        total[char] = (total[char] || 0) + 1;
+
+                        if (total[char] > (total[max_name] || 0))
+                            max_name = char;
+
+                        const role = item[3];
+                        const result = item[6];
+
+                        alltotal += 1;
+                        total[role] += 1;
+                        if (result === '胜利') {
+                            allwin += 1;
+                            win[role] += 1;
+                        } else if (result === '逃跑') {
+                            offline += 1;
                         }
                     }
-                    console.log(usage, max);
 
                     return [calcLevel(exp) + '',
                             calcWen(wen) + '',
                             calcWu(wu) + '',
-                            total, ratio(zhuwins + zhongwins + neiwins + fanwins, total),
-                            ratio(offline, total),
-                            zhus, ratio(zhuwins, zhus),
-                            zhongs, ratio(zhongwins, zhongs),
-                            fans, ratio(fanwins, fans),
-                            neis, ratio(neiwins, neis),
-                            max_names
+                            alltotal + '', ratio(total.黑幕 + total.司祝 + total.异端 + total.君主, alltotal),
+                            ratio(offline, alltotal),
+                            total.君主 + '', ratio(win.君主, total.君主),
+                            total.司祝 + '', ratio(win.司祝, total.司祝),
+                            total.异端 + '', ratio(win.异端, total.异端),
+                            total.黑幕 + '', ratio(win.黑幕, total.黑幕),
+                            max_name + ''
                            ];
                 }
 
