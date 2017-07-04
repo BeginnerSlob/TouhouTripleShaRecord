@@ -34,14 +34,21 @@ export function getStatistics(row: string[], achievements: string[][], records: 
                     let alltotal = 0;
                     let offline = 0;
 
-                    let max_name = '';
+                    let max_names = '无';
+                    let max = 0;
 
                     for(const item of records){
                         const char = item[1];
                         total[char] = (total[char] || 0) + 1;
 
-                        if (total[char] > (total[max_name] || 0) && total[char] >= 3)
-                            max_name = char;
+                        if (total[char] >= 3) {
+                            if (total[char] > max) {
+                                max = total[char];
+                                max_names = char;
+                            } else if (total[char] === max) {
+                                max_names += '，' + char;
+                            }
+                        }
 
                         const role = item[3];
                         const result = item[6];
@@ -65,7 +72,7 @@ export function getStatistics(row: string[], achievements: string[][], records: 
                             total.司祝 + '', ratio(win.司祝, total.司祝),
                             total.异端 + '', ratio(win.异端, total.异端),
                             total.黑幕 + '', ratio(win.黑幕, total.黑幕),
-                            max_name + ''
+                            max_names
                            ];
                 }
 
