@@ -11,7 +11,6 @@ export function getCSV(url = main.URL_ACCOUNTS): Promise<string[][]>{// {{{
             if(xhttp.readyState == 4){
                 if(xhttp.status == 200){
                     const data =  CSV.parse(xhttp.responseText);
-                    console.log(data);
                     resolve(data);
                 }else{
                     reject('');
@@ -48,7 +47,7 @@ export function getAchievementTemplates(){
         }
         getCSV(main.URL_ACHIEVEMENT).then(res =>{
             achievementTemplates = {};
-            for(let i = 1; i < res.length; i ++){
+            for(let i = 0; i < res.length; i ++){
                 let [id, title, desc, score, completionRequiredS] = res[i];
                 let completionRequired = parseInt(completionRequiredS);
                 achievementTemplates[id] = {

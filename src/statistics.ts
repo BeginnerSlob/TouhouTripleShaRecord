@@ -1,26 +1,21 @@
 import * as data from './data';
 import * as Promise from 'promise';
 
-export function appendColumns(a: string[][], b: string[][]){
-    let c: string[][] = [];
-    for(let i = 0; i < a.length; i ++){
-        c.push(a[i].concat(b[i]));
-    }
-    return c;
+export function appendColumn(a: string[], b: string[]){
+    return a.concat(b);
 }
 
 function ratio(x, y){
     return Math.round(x / y * 10000) / 100 + '%';
 }
 
-export function getStatistics(rows: string[][]){
+export function getStatistics(row: string[], achievements: string[][], records: string[][]){
 
-    return new Promise<string[][]>(resolve => {
+    return new Promise<string[]>(resolve => {
         Promise.all([data.getLevelCalculator(),
                     data.getWenCalculator(),
                     data.getWuCalculator()])
             .then(res => {
-                let extraRows: string[][] = [];
                 let [calcLevel, calcWen, calcWu] = res;
 
                 function getStatsFor(row: string[]){
@@ -36,19 +31,25 @@ export function getStatistics(rows: string[][]){
                     let fanwins = parseInt(row[5]);
                     let neiwins = parseInt(row[6]);
 
+                    const usage: {[key: string]: number} = {};
+                    let max = '';
+                    for(const item of records){
+                        const char = item[1];
+                        usage[char] = (usage[char] || 0) + 1;
+                        if(usage[char] > (usage[max] || 0)) max = char;
+                    }
+                    console.log(usage, max);
+
                     return [calcLevel(exp) + '',
                             calcWen(wen) + '',
                             calcWu(wu) + '',
                             ratio(offline, total),
                             ratio(zhuwins + zhongwins + neiwins + fanwins, total),
+                            max
                            ];
                 }
 
-                for(let i = 0; i < rows.length; i ++){
-                    extraRows.push(getStatsFor(rows[i]));
-                }
-
-                resolve(extraRows);
+                resolve(getStatsFor(row));
             });
     })
 }

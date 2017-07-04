@@ -8,12 +8,12 @@ export function el(tag: string, traits?: {[key: string]: string}){
     return element;
 }
 
-export function header(header: HTMLTableHeaderCellElement, data: string[]){
+export function header(header: HTMLTableHeaderCellElement, data: string[], debug?: boolean){
     header.innerHTML = '';
 
     let ignore: any = {};
     for(let i = 0; i < data.length; i ++){
-        if(data[i][0] == '~'){
+        if(data[i][0] == '~' && !debug){
             ignore[i] = true;
             continue;
         }

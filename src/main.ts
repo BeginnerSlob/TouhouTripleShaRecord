@@ -15,43 +15,36 @@ export const URL_LEVEL = `${URL_BASE}/level.csv`;
 let playersHeader = ['~uid','用户名','~密码',
                      '~主公胜场','~忠臣胜场','~反贼胜场','~内奸胜场',
                      '~离线','~总场数','经验值','文功','武功',
-                     '等级', '文官职', '武官职', '逃跑率', '总胜率'
+                     '等级', '文官职', '武官职', '逃跑率', '总胜率',
+                     '常用武将'
                     ];
 let playersHead = document.querySelector('#table-head') as HTMLTableHeaderCellElement;
 let playersHeaderIgnore = table.header(playersHead, playersHeader);
 
 data.getPlayers().then(res =>{
     let body = document.querySelector('#table-body') as HTMLTableDataCellElement;
-    let button = {
-        name: '查看战绩', callback: row => {
-            fillPlayerTables(row[0]);
-        }
-    };
-    table.body(body, res, playersHeaderIgnore, button);
-    stats.getStatistics(res).then(extra => {
-        res = stats.appendColumns(res, extra);
-        table.body(body, res, playersHeaderIgnore, button);
-    });
 
     let search = document.querySelector('#search-bar') as HTMLInputElement;
     search.addEventListener('change', e => {
         let term = search.value.toLocaleLowerCase();
-        let result = [];
-        for(let i = 1; i < res.length; i ++){
+        let result = null;
+        for(let i = 0; i < res.length; i ++){
             for(let j = 0; j < res[i].length; j ++){
                 let d = res[i][j] + '';
                 if(d.toLocaleLowerCase().indexOf(term) >= 0){
-                    console.log(`${d} - ${search.value}`)
-                    result.push(res[i]);
+                    result = res[i];
                     break;
                 }
             }
+            if(result) break;
         }
-        
-        table.body(body, result, playersHeaderIgnore, button);
-        stats.getStatistics(result).then(extra => {
-            result = stats.appendColumns(result, extra);
-            table.body(body, result, playersHeaderIgnore, button);
+
+        table.body(body, [result], playersHeaderIgnore);
+        fillPlayerTables(result[0]).then(res => {
+            stats.getStatistics(result as any, res[0] as any, res[1] as any).then(extra => {
+                result = stats.appendColumn(result, extra);
+                table.body(body, [result], playersHeaderIgnore);
+            });
         });
     });
 });
@@ -61,13 +54,17 @@ let recordHead = document.querySelector('#player-table-head') as HTMLTableHeader
 let recordIgnores = table.header(recordHead, recordHeader);
 
 function fillPlayerTables(id: string){// {{{
-    data.getCSV(`${URL_BASE}/${id}_achievement.csv`).then(res => {
+    const task1 = data.getCSV(`${URL_BASE}/${id}_achievement.csv`).then(res => {
         let achievements = document.querySelector('#achievements') as HTMLElement;
         table.achievements(achievements, res);
+        return Promise.resolve(res);
     });
 
-    data.getCSV(`${URL_BASE}/${id}_record.csv`).then(res => {
+    const task2 = data.getCSV(`${URL_BASE}/${id}_records.csv`).then(res => {
         let body = document.querySelector('#player-table-body') as HTMLTableDataCellElement;
         table.body(body, res, recordIgnores);
+        return Promise.resolve(res);
     });
+
+    return Promise.all([task1, task2]);
 }// }}}
