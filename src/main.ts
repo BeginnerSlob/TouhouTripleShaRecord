@@ -4,18 +4,21 @@ import * as data from './data';
 import * as table from './table';
 import * as stats from './statistics';
 
-export const URL_BASE     = 'https://raw.githubusercontent.com/BeginnerSlob/TouhouTripleShaRecord/master/data';
+export const URL_BASE     = `./data`;
 export const URL_ACCOUNTS = `${URL_BASE}/accounts.csv`;
-export const URL_ZHANGONG = `${URL_BASE}/zhangong.csv`;
 export const URL_ACHIEVEMENT = `${URL_BASE}/achievement.csv`;
 export const URL_WEN = `${URL_BASE}/wen.csv`;
 export const URL_WU = `${URL_BASE}/wu.csv`;
 export const URL_LEVEL = `${URL_BASE}/level.csv`;
 
-let playersHeader = ['~uid','用户名','~密码',
-                     '~主公胜场','~忠臣胜场','~反贼胜场','~内奸胜场',
-                     '~离线','~总场数','经验值','文功','武功',
-                     '等级', '文官职', '武官职', '逃跑率', '总胜率',
+let playersHeader = ['~uid', '用户名', '~密码',
+                     '经验值', '文功', '武功',
+                     '等级', '文官职', '武官职',
+                     '总场数', '总胜率', '逃跑率',
+                     '君主场数', '君主胜率',
+                     '司祝场数', '司祝胜率',
+                     '异端场数', '异端胜率',
+                     '黑幕场数', '黑幕胜率',
                      '常用武将'
                     ];
 let playersHead = document.querySelector('#table-head') as HTMLTableHeaderCellElement;
@@ -26,12 +29,12 @@ data.getPlayers().then(res =>{
 
     let search = document.querySelector('#search-bar') as HTMLInputElement;
     search.addEventListener('change', e => {
-        let term = search.value.toLocaleLowerCase();
+        let term = search.value.toLocaleString();
         let result = null;
         for(let i = 0; i < res.length; i ++){
-            for(let j = 0; j < res[i].length; j ++){
+            for(let j = 0; j < 2; j ++){
                 let d = res[i][j] + '';
-                if(d.toLocaleLowerCase().indexOf(term) >= 0){
+                if(d.toLocaleString() == term){
                     result = res[i];
                     break;
                 }
