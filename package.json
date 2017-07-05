@@ -2,18 +2,19 @@
   "name": "ths",
   "version": "1.0.0",
   "description": "虫娘要的csv读取demo",
-  "main": "bin/bundle.js",
+  "main": "docs/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cd bin && budo ../src/main.ts:bundle.js --live -- -p tsify",
-    "build": "browserify src/main.ts -p tsify | uglifyjs -c > bin/bundle.js"
+    "dev": "cd docs && budo ../src/main.ts:bundle.js --live -- -p tsify",
+    "build": "browserify src/main.ts -p tsify | uglifyjs -c > docs/bundle.js"
   },
   "author": "hyper",
   "license": "ISC",
   "dependencies": {
     "browserify": "^14.4.0",
+    "budo": "^10.0.3",
     "csv-js": "^1.0.0",
-    "promise": "^7.3.0",
+    "promise": "^7.1.1",
     "tsify": "^3.0.1",
     "typescript": "^2.3.4",
     "uglify-es": "^3.0.15"
