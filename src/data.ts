@@ -1,12 +1,13 @@
-// vim: set foldmethod=marker: 
 import * as Promise from 'promise';
 import * as main from './main';
-import * as CSV from 'csv-js';
+
+declare function require(key: string): any;
+const CSV = require('csv-js');
 
 export function getCSV(url = main.URL_ACCOUNTS): Promise<string[][]>{// {{{
     let xhttp = new XMLHttpRequest();
 
-    let promise = new Promise( (resolve, reject) => {
+    let promise = new Promise<string[][]>( (resolve, reject) => {
         xhttp.onreadystatechange = () =>{
             if(xhttp.readyState == 4){
                 if(xhttp.status == 200){
@@ -37,7 +38,7 @@ interface AchievementTemplateTable{
     [id: string]:AchievementTemplate
 }
 
-let achievementTemplates: AchievementTemplateTable = null;
+let achievementTemplates: AchievementTemplateTable | null = null;
 
 export function getAchievementTemplates(){
     return new Promise<AchievementTemplateTable>(resolve => {
@@ -59,7 +60,7 @@ export function getAchievementTemplates(){
     });
 }// }}}
 
-let players: string[][] = null;// {{{
+let players: string[][] | null = null;// {{{
 
 export function getPlayers(){
     return new Promise<string[][]>(resolve => {
@@ -71,10 +72,11 @@ export function getPlayers(){
     });
 }// }}}
 
-let levelCalc: (score: number) => number = null;
+type ScoreCalculator = ((score: number) => string) | null;
+let levelCalc: ScoreCalculator = null;
 
 export function getLevelCalculator(){
-    return new Promise<(score: number) => number>(resolve => {
+    return new Promise<(score: number) => string>(resolve => {
         if(levelCalc){
             resolve(levelCalc);
             return;
@@ -85,16 +87,16 @@ export function getLevelCalculator(){
                 for(let i = levels.length - 1; i >= 0; i --){
                     let threshold = parseInt(levels[i][0]);
                     let level = parseInt(levels[i][1]);
-                    if(exp >= threshold)return level;
+                    if(exp >= threshold)return level + '';
                 }
-                return 0;
+                return '0';
             };
             resolve(levelCalc);
         });
     });
 }
 
-let wenCalc: (score: number) => string = null;
+let wenCalc: ScoreCalculator = null;
 
 export function getWenCalculator(){
     return new Promise<(score: number) => string>(resolve => {
@@ -117,7 +119,7 @@ export function getWenCalculator(){
     });
 }
 
-let wuCalc: (score: number) => string = null;
+let wuCalc: ScoreCalculator = null;
 
 export function getWuCalculator(){
     return new Promise<(score: number) => string>(resolve => {
@@ -131,7 +133,7 @@ export function getWuCalculator(){
                 for(let i = levels.length - 1; i >= 0; i --){
                     let threshold = parseInt(levels[i][0]);
                     let title = levels[i][1];
-                    if(exp >= threshold)return title; 
+                    if(exp >= threshold)return title;
                 }
                 return '无';
             };

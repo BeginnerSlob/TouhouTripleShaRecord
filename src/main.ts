@@ -35,7 +35,7 @@ data.getPlayers().then(res =>{
     let search = document.querySelector('#search-bar') as HTMLInputElement;
     search.addEventListener('change', e => {
         let term = search.value.toLocaleString();
-        let result = null;
+        let result: any = null;
         for(let i = 0; i < res.length; i ++){
             for(let j = 0; j < 2; j ++){
                 let d = res[i][j] + '';
@@ -80,10 +80,10 @@ function fillPlayerTables(id: string){// {{{
     return Promise.all([task1, task2]);
 }// }}}
 
-const ap = document.querySelector('#achievements-panel');
-document.querySelector('#achievements-uncompleted-tab')
+const ap = document.querySelector('#achievements-panel')!;
+document.querySelector('#achievements-uncompleted-tab')!
     .addEventListener('click', e => ap.setAttribute('class', 'mdl-tabs__panel uncompleted'));
-document.querySelector('#achievements-completed-tab')
+document.querySelector('#achievements-completed-tab')!
     .addEventListener('click', e => ap.setAttribute('class', 'mdl-tabs__panel completed'));
-document.querySelector('#achievements-all-tab')
+document.querySelector('#achievements-all-tab')!
     .addEventListener('click', e => ap.setAttribute('class', 'mdl-tabs__panel all'));

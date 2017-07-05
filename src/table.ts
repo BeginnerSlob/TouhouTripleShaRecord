@@ -67,20 +67,20 @@ interface ZhangongItem{
 export function makeZhangongIcon(item: ZhangongItem){
     if(!item.firstCompletion)item.firstCompletion = '';
     if(item.firstCompletion == '1990-01-01')item.firstCompletion = '';
-    let temp = document.querySelector('template#template-achievement').innerHTML;
+    let temp = document.querySelector('template#template-achievement')!.innerHTML;
     for(let key in item){
-        let text = item[key];
+        let text = (item as any)[key];
         if(key == 'firstCompletion' && text)text = '完成于：' + text;
         temp = temp.replace(new RegExp(`{{${key}}}`, 'g'), text);
     }
     let div = el('div' );
     div.innerHTML = temp;
 
-    let progress = div.querySelector(`#${item.id}-progress`);
+    let progress = div.querySelector(`#${item.id}-progress`)!;
     if(item.requiredProgress <= 1){
-        progress.parentElement.removeChild(progress);
+        progress.parentElement!.removeChild(progress);
     }else{
-        progress.parentElement.insertBefore(el('br'), progress);
+        progress.parentElement!.insertBefore(el('br'), progress);
         progress.addEventListener('mdl-componentupgraded', e => {
             (progress as any).MaterialProgress.setProgress(Math.min(100, item.progress / item.requiredProgress * 100));
         });
@@ -89,7 +89,7 @@ export function makeZhangongIcon(item: ZhangongItem){
         div.classList.add('mdl-badge');
         div.dataset['badge'] = item.completions == 1 ? '✓' : item.completions + '';
     }else{
-        let img = div.querySelector('img');
+        let img = div.querySelector('img')!;
         img.style.filter = 'grayscale(1)';
     }
 
@@ -98,16 +98,16 @@ export function makeZhangongIcon(item: ZhangongItem){
 
 export function achievements(achievements: HTMLElement, res: string[][]){
     data.getAchievementTemplates().then(templates => {
-        let all = achievements.querySelector('#achievements-panel');
+        let all = achievements.querySelector('#achievements-panel')!;
 
         all.innerHTML = '';
 
-        for(let i = 0; i < res.length; i ++){
-            let [id, completionsS, firstCompletion, progressS] = res[i];
+        for(const item of res){
+            let [id, completionsS, firstCompletion, progressS] = item;
             let completions = parseInt(completionsS);
             let progress = parseInt(progressS);
             let img = 'sha.png';
-            let template = templates[id];
+            let template = templates[id] || {title: "未知战功", desc: "怕是虫娘搞错了吧？？？", score: 0, completionRequired: 1000};
             let {title, desc, completionRequired} = template;
             if(completionRequired > 1)desc += `(${progress}/${completionRequired})`;
 
@@ -117,8 +117,9 @@ export function achievements(achievements: HTMLElement, res: string[][]){
             });
 
             if(completions > 0) div.classList.add('completed-achievement');
+            else div.classList.add('uncompleted-achievement');
             all.appendChild(div);
         }
-        window.requestAnimationFrame((window as any).componentHandler.upgradeDom());
+        (window as any).componentHandler.upgradeDom();
     });
 }
