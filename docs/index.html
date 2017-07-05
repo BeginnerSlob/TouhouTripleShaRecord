@@ -30,6 +30,7 @@
      }
      #achievements .mdl-tabs__panel {
          display: flex;
+         flex-wrap: wrap;
      }
      #achievements-panel > div {
          display: none;
@@ -83,9 +84,9 @@
                         <div class="mdl-tabs__tab-bar">
                             <a id="achievements-uncompleted-tab" href="#achievements-panel" class="mdl-tabs__tab">未达成</a>
                             <a id="achievements-completed-tab" href="#achievements-panel" class="mdl-tabs__tab">已达成</a>
-                            <a id="achievements-all-tab" href="#achievements-panel" class="mdl-tabs__tab">所有</a>
+                            <a id="achievements-all-tab" href="#achievements-panel" class="mdl-tabs__tab is-active">所有</a>
                         </div>
-                        <div class="mdl-tabs__panel" id="achievements-panel">
+                        <div class="mdl-tabs__panel all" id="achievements-panel">
                         </div>
                     </div>
                 </div>

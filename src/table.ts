@@ -102,13 +102,24 @@ export function achievements(achievements: HTMLElement, res: string[][]){
 
         all.innerHTML = '';
 
-        for(const item of res){
-            let [id, completionsS, firstCompletion, progressS] = item;
-            let completions = parseInt(completionsS);
-            let progress = parseInt(progressS);
-            let img = 'sha.png';
-            let template = templates[id] || {title: "未知战功", desc: "怕是虫娘搞错了吧？？？", score: 0, completionRequired: 1000};
+        const ourResult: {[key: string]: string[]} = {};
+        for(const item of res) {
+            console.log(item[0]);
+            if(!item[0])break;
+            ourResult[item[0]] = item;
+        }
+
+        for(const id in templates){
+            const template = templates[id];
             let {title, desc, completionRequired} = template;
+
+            const item = ourResult[id] || [];
+            let [_, completionsS, firstCompletion, progressS] = item;
+            console.log(item);
+
+            let completions = parseInt(completionsS) || 0;
+            let progress = parseInt(progressS) || 0;
+            let img = 'sha.png';
             if(completionRequired > 1)desc += `(${progress}/${completionRequired})`;
 
             let div = makeZhangongIcon({
