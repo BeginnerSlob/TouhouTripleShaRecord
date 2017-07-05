@@ -119,7 +119,7 @@ export function achievements(achievements: HTMLElement, res: string[][]){
 
             let completions = parseInt(completionsS) || 0;
             let progress = parseInt(progressS) || 0;
-            let img = 'sha.png';
+            let img = `img/${id}.png`;
             if(completionRequired > 1)desc += `(${progress}/${completionRequired})`;
 
             let div = makeZhangongIcon({
