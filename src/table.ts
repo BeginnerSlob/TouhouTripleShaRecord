@@ -106,7 +106,7 @@ export function achievements(achievements: HTMLElement, res: string[][]){
             let [id, completionsS, firstCompletion, progressS] = item;
             let completions = parseInt(completionsS);
             let progress = parseInt(progressS);
-            let img = 'sha.png';
+            let img = 'img/' + id + '.png';
             let template = templates[id] || {title: "未知战功", desc: "怕是虫娘搞错了吧？？？", score: 0, completionRequired: 1000};
             let {title, desc, completionRequired} = template;
             if(completionRequired > 1)desc += `(${progress}/${completionRequired})`;
