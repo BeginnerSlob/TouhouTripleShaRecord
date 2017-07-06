@@ -134,3 +134,8 @@ export function achievements(achievements: HTMLElement, res: string[][]){
         (window as any).componentHandler.upgradeDom();
     });
 }
+
+const zhangongPoint = document.querySelector("#战功点")!;
+export function setZhangong(points: number) {
+    zhangongPoint.textContent = points + '';
+}
