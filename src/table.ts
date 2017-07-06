@@ -110,6 +110,7 @@ export function achievements(achievements: HTMLElement, res: string[][]){
             ourResult[item[0]] = item;
         }
 
+        let point = 0;
         for(const id in templates){
             const template = templates[id];
             let {title, desc, score, completionRequired} = template;
@@ -128,10 +129,13 @@ export function achievements(achievements: HTMLElement, res: string[][]){
                 firstCompletion, requiredProgress: completionRequired
             });
 
+            point += completions * score;
+
             if(completions > 0) div.classList.add('completed-achievement');
             else div.classList.add('uncompleted-achievement');
             all.appendChild(div);
         }
+        setZhangong(point);
         (window as any).componentHandler.upgradeDom();
     });
 }
