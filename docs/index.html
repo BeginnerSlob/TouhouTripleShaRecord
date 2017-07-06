@@ -109,7 +109,10 @@
     <template type="text/html" id="template-achievement">
         <img class="mdl-list__item-avatar achievement" src="{{img}}"  id="{{id}}">
         <div class="mdl-tooltip mdl-tooltip--top" for="{{id}}">
-            <p>{{title}}</p>
+            <div style="font-size: 1.8em; margin: 0.5em;">{{title}}</div>
+            {{score}}战功点
+            <br/>
+            <br/>
             {{desc}}
             <p style="margin-bottom: 0;">{{firstCompletion}}</p>
             <div id="{{id}}-progress" class="mdl-progress mdl-js-progress"></div>

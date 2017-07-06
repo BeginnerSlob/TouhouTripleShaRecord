@@ -30,7 +30,7 @@ interface AchievementTemplate{// {{{
     id: string;
     title: string;
     desc: string;
-    score: string;
+    score: number;
     completionRequired: number;
 }
 
@@ -49,7 +49,8 @@ export function getAchievementTemplates(){
         getCSV(main.URL_ACHIEVEMENT).then(res =>{
             achievementTemplates = {};
             for(let i = 0; i < res.length; i ++){
-                let [id, title, desc, score, completionRequiredS] = res[i];
+                let [id, title, desc, scoreS, completionRequiredS] = res[i];
+                const score = parseFloat(scoreS);
                 let completionRequired = parseInt(completionRequiredS);
                 achievementTemplates[id] = {
                     id, title, desc, score, completionRequired

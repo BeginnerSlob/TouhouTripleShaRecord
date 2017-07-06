@@ -58,6 +58,7 @@ interface ZhangongItem{
     img: string;
     title: string;
     desc: string;
+    score: number;
     completions: number;
     firstCompletion?: string;
     progress: number;
@@ -111,7 +112,7 @@ export function achievements(achievements: HTMLElement, res: string[][]){
 
         for(const id in templates){
             const template = templates[id];
-            let {title, desc, completionRequired} = template;
+            let {title, desc, score, completionRequired} = template;
 
             const item = ourResult[id] || [];
             let [_, completionsS, firstCompletion, progressS] = item;
@@ -123,7 +124,7 @@ export function achievements(achievements: HTMLElement, res: string[][]){
             if(completionRequired > 1)desc += `(${progress}/${completionRequired})`;
 
             let div = makeZhangongIcon({
-                id, img, title, desc, completions, progress,
+                id, img, title, desc, completions, progress, score,
                 firstCompletion, requiredProgress: completionRequired
             });
 
