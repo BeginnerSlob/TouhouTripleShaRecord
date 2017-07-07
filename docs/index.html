@@ -44,17 +44,27 @@
      #achievements-panel.all > div {
          display: initial;
      }
+     .centered {
+         margin-left: auto;
+         margin-right: auto;
+         display: table;
+     }
+     .pagination-button {
+         font-weight: normal;
+         font-size: 0.8em;
+         color: grey;
+         cursor: pointer;
+     }
     </style>
 </head>
 <body>
-    <div id="app" class="mdl-grid" style="margin-top: 10em; max-width: 1500px; margin-left: auto; margin-right: auto">
-        <div class="mdl-cell mdl-cell--8-col" >
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <div id="app" style="margin-top: 10em; max-width: 990px; margin-left: auto; margin-right: auto">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label centered">
                 <input class="mdl-textfield__input" type="text" id="search-bar">
                 <label class="mdl-textfield__label" for="sample3">搜索...</label>
             </div>
 
-            <table class="mdl-data-table mdl-js-data-table  mdl-shadow--2dp">
+            <table class="mdl-data-table mdl-js-data-table  mdl-shadow--2dp centered">
                 <thead>
                     <tr id="table-head">
                         <th class="mdl-data-table__cell--non-numeric">id</th>
@@ -66,7 +76,7 @@
 
             <br/>
 
-            <table class="mdl-data-table mdl-js-data-table  mdl-shadow--2dp">
+            <table class="mdl-data-table mdl-js-data-table  mdl-shadow--2dp centered">
                 <thead>
                     <tr id="table-head-pt2">
                         <th class="mdl-data-table__cell--non-numeric">id</th>
@@ -75,8 +85,7 @@
                 <tbody id="table-body-pt2">
                 </tbody>
             </table>
-        </div>
-        <div class="mdl-cell mdl-cell--8-col" >
+        
             <div class="mdl-shadow--2dp"  style="margin-bottom: 1em;">
                 <div style="font-weight: bold; padding: 0.5em; width: 100%; text-align: center; font-size: 1.2em; line-height: 2em; position: relative;">
                     <span style="position: absolute; left: 1em;">战功点：<span id="战功点">0</span> </span>
@@ -94,17 +103,25 @@
                     </div>
                 </div>
             </div>
-            <table class="mdl-data-table mdl-js-data-table  mdl-shadow--2dp">
-                <thead>
-                    <tr id="player-table-head">
-                        <th class="mdl-data-table__cell--non-numeric">战绩</th>
-                    </tr>
-                </thead>
-                <tbody id="player-table-body">
-                </tbody>
-            </table>
+
+            <div class="mdl-shadow--2dp">
+                <div style="font-weight: bold; padding: 0.5em; width: 100%; text-align: center; font-size: 1.2em; line-height: 2em; position: relative;">
+                    <span class="pagination-button" style="position: absolute; left: 1em;" id="战绩上一页">往前</span>
+                    <span class="pagination-button" style="position: absolute; right: 2em;" id="战绩下一页">往后</span>
+                    战绩 <span id="战绩页">1/1</span>
+                </div>
+                <table class="mdl-data-table mdl-js-data-table " style="width: 100%">
+                    <thead>
+                        <tr id="player-table-head">
+                            <th class="mdl-data-table__cell--non-numeric"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="player-table-body">
+                    </tbody>
+                </table>
+            </div>
             <br>
-        </div>
+        
     </div>
     <template type="text/html" id="template-achievement">
         <img class="mdl-list__item-avatar achievement" src="{{img}}"  id="{{id}}">
