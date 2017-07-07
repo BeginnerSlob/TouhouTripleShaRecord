@@ -76,6 +76,9 @@ function inverted(arr: any[]) {
     return result;
 }
 
+const prevRecord = document.querySelector("#战绩上一页")! as HTMLSpanElement;
+const nextRecord = document.querySelector("#战绩下一页")! as HTMLSpanElement;
+
 function gotoRecordPage(i: number) {
     const totalPage = Math.floor((records.length - 1) / 10) + 1;
     i = Math.max(i, 0);
@@ -84,10 +87,13 @@ function gotoRecordPage(i: number) {
 
     table.body(recordsBody, records.slice(i * 10, i * 10 + 10), recordIgnores);
     recordsLabel.textContent = `${totalPage - i}/${totalPage}`;
+
+    nextRecord.style.display = i === 0 ? "none" : "inherit";
+    prevRecord.style.display = (i + 1) === totalPage ? "none" : "inherit";
 }
 
-document.querySelector("#战绩上一页")!.addEventListener('click', () => gotoRecordPage(page + 1));
-document.querySelector("#战绩下一页")!.addEventListener('click', () => gotoRecordPage(page - 1));
+prevRecord.addEventListener('click', () => gotoRecordPage(page + 1));
+nextRecord.addEventListener('click', () => gotoRecordPage(page - 1));
 
 function fillPlayerTables(id: string) {// {{{
     const task1 = data.getCSV(`${URL_BASE}/${id}_achievement.csv`).then((res) => {
