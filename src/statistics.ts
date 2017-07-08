@@ -7,7 +7,7 @@ export function appendColumn(a: string[], b: string[]){
 
 function ratio(x: number, y: number){
     if (y == 0)
-        return '0.00%';
+        return '0%';
     return Math.round(x / y * 10000) / 100 + '%';
 }
 
