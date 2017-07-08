@@ -105,7 +105,6 @@ export function achievements(achievements: HTMLElement, res: string[][]){
 
         const ourResult: {[key: string]: string[]} = {};
         for(const item of res) {
-            console.log(item[0]);
             if(!item[0])break;
             ourResult[item[0]] = item;
         }
@@ -117,7 +116,6 @@ export function achievements(achievements: HTMLElement, res: string[][]){
 
             const item = ourResult[id] || [];
             let [_, completionsS, firstCompletion, progressS] = item;
-            console.log(item);
 
             let completions = parseInt(completionsS) || 0;
             let progress = parseInt(progressS) || 0;

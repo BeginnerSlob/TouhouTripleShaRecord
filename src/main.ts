@@ -105,7 +105,6 @@ function fillPlayerTables(id: string) {// {{{
     const task2 = data.getCSV(`${URL_BASE}/${id}_records.csv`).then((res) => {
         records = inverted(res);
         gotoRecordPage(0);
-        console.log(records.length);
         return Promise.resolve(res);
     });
 
