@@ -69,10 +69,13 @@ const recordsBody = document.querySelector("#player-table-body") as HTMLTableDat
 let records: any[] = [];
 let page = 0;
 
-function inverted(arr: any[]) {
+function inverted(arr: string[][]) {
     const result: any = [];
-    for (let i = 0; i < arr.length; i ++)
+    for (let i = 0; i < arr.length; ++ i) {
+        arr[i][0] = arr[i][0].replace(/ /g, "\n");
+        arr[i][arr[i].length - 1] = arr[i][arr[i].length - 1].replace(/ /g, "\n");
         result[arr.length - i - 1] = arr[i];
+    }
     return result;
 }
 
