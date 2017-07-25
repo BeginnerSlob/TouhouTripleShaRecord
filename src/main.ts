@@ -73,6 +73,7 @@ function inverted(arr: string[][]) {
     const result: any = [];
     for (let i = 0; i < arr.length; ++ i) {
         arr[i][0] = arr[i][0].replace(/ /g, "\n");
+        arr[i][2] = arr[i][2].replace(/ /g, "\n").replace("\n", " ");
         arr[i][arr[i].length - 1] = arr[i][arr[i].length - 1].replace(/ /g, "\n");
         result[arr.length - i - 1] = arr[i];
     }
