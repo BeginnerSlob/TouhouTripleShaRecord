@@ -53,6 +53,8 @@ export function getStatistics(row: string[], achievements: string[][], records: 
                         const role = item[3];
                         const result = item[6];
 
+                        if (result === '平局')
+                            continue;
                         alltotal += 1;
                         total[role] += 1;
                         if (result === '胜利') {
